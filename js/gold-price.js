@@ -178,10 +178,10 @@
 
   const refreshBtn = document.getElementById('price-refresh');
   if (refreshBtn) {
-    refreshBtn.addEventListener('click', async () => {
+    refreshBtn.onclick = async () => {
       refreshBtn.classList.add('spinning');
       await fetchPrices();
       setTimeout(() => refreshBtn.classList.remove('spinning'), 800);
-    });
+    };
   }
 })();

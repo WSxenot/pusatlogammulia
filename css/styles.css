@@ -375,6 +375,13 @@ a:hover {
 }
 
 /* === PRICE TABLE === */
+.price-date-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
 .price-date-badge {
   display: inline-flex;
   align-items: center;
@@ -385,7 +392,6 @@ a:hover {
   border-radius: var(--radius-full);
   font-size: 0.875rem;
   color: var(--accent);
-  margin-bottom: 24px;
 }
 
 .price-refresh-btn {
@@ -400,12 +406,11 @@ a:hover {
   color: var(--text-secondary);
   cursor: pointer;
   transition: all 0.3s ease;
-  margin-left: auto;
 }
 
 .price-refresh-btn:hover {
-  border-color: var(--accent);
-  color: var(--accent);
+  border-color: #C9A84C;
+  color: #C9A84C;
 }
 
 .price-refresh-btn.spinning svg {
