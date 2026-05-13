@@ -375,11 +375,21 @@ a:hover {
 }
 
 /* === PRICE TABLE === */
-.price-date-row {
+.price-heading-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 16px;
+}
+
+.price-heading-row .section-heading {
+  margin-bottom: 0;
+}
+
+.price-date-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
 .price-date-badge {
@@ -1220,6 +1230,19 @@ a:hover {
 @media (max-width: 768px) {
   .section {
     padding: var(--section-padding-top) var(--content-padding) var(--section-padding-mobile);
+  }
+
+  .navbar-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .navbar-logo img {
+    height: 40px !important;
+    width: auto !important;
+    max-height: 40px;
+    flex-shrink: 0;
   }
 
   .section-heading {

@@ -34,9 +34,8 @@
   <meta name="twitter:image" content="https://pusatlogammulia.com/images/og-image.png">
 
   <!-- Favicon -->
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="images/favicon.png">
+  <link rel="apple-touch-icon" href="images/favicon.png">
 
   <!-- Theme color (browser address bar on mobile) -->
   <meta name="theme-color" content="#0A0A0A">
@@ -87,7 +86,10 @@
   <nav id="navbar" class="navbar">
     <div class="navbar-inner">
       <!-- Logo -->
-      <a href="#hero" class="navbar-logo">Pusat Logam Mulia</a>
+      <a href="#hero" class="navbar-logo">
+        <img src="images/LOGO_TRANSPARENT CL.png" alt="" style="height: 48px; width: auto;">
+        Pusat Logam Mulia
+      </a>
 
       <!-- Nav Links -->
       <ul class="navbar-links">
@@ -143,18 +145,19 @@
   <!-- 3. Price Table -->
   <section id="harga" class="section price-table-section">
     <div class="section-inner reveal">
-      <h2 class="section-heading">Harga <span class="accent">Kami</span></h2>
-      <p class="section-subheading">Harga jual dan beli emas batangan hari ini. Diperbarui setiap hari.</p>
-
-      <div class="price-date-row">
-        <div class="price-date-badge" id="price-date">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-          <span id="price-date-text">Memuat tanggal...</span>
+      <div class="price-heading-row">
+        <h2 class="section-heading">Harga <span class="accent">Kami</span></h2>
+        <div class="price-date-row">
+          <div class="price-date-badge" id="price-date">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            <span id="price-date-text">Memuat tanggal...</span>
+          </div>
+          <button id="price-refresh" class="price-refresh-btn" aria-label="Perbarui harga" title="Perbarui harga">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+          </button>
         </div>
-        <button id="price-refresh" class="price-refresh-btn" aria-label="Perbarui harga" title="Perbarui harga">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
-        </button>
       </div>
+      <p class="section-subheading">Harga jual dan beli emas batangan hari ini. Diperbarui setiap hari.</p>
 
       <div class="price-table-wrapper">
         <table class="price-table" id="price-table">
