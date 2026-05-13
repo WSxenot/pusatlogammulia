@@ -175,4 +175,13 @@
 
   fetchPrices();
   window.__idrRate = null;
+
+  const refreshBtn = document.getElementById('price-refresh');
+  if (refreshBtn) {
+    refreshBtn.addEventListener('click', async () => {
+      refreshBtn.classList.add('spinning');
+      await fetchPrices();
+      setTimeout(() => refreshBtn.classList.remove('spinning'), 800);
+    });
+  }
 })();
