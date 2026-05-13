@@ -186,6 +186,9 @@ a:hover {
 }
 
 .navbar-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   font-family: var(--font-heading);
   font-size: 1.4rem;
   font-weight: 700;
@@ -297,10 +300,19 @@ a:hover {
 .hero .subtitle {
   font-size: 1.1rem;
   color: var(--text-secondary);
-  margin-bottom: 40px;
+  margin-bottom: 18px;
   max-width: 500px;
   margin-left: auto;
   margin-right: auto;
+}
+
+.hero-proof {
+  color: #C9A84C;
+  font-size: 0.85rem;
+  font-variant: small-caps;
+  letter-spacing: 0.1em;
+  text-align: center;
+  margin-bottom: 32px;
 }
 
 .hero-overlay {
@@ -374,6 +386,104 @@ a:hover {
   }
 }
 
+.comparison-table-wrapper {
+  overflow: visible;
+  background: #111111;
+  border: 1px solid var(--bg-surface-border);
+  border-radius: var(--radius-lg);
+}
+
+.comparison-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.comparison-table th,
+.comparison-table td {
+  padding: 18px 20px;
+  border-bottom: 1px solid var(--bg-surface-border);
+  color: #FFFFFF;
+  text-align: left;
+}
+
+.comparison-table tr:last-child th,
+.comparison-table tr:last-child td {
+  border-bottom: none;
+}
+
+.comparison-table thead th {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.comparison-table thead .plm-column {
+  color: #C9A84C;
+}
+
+.comparison-table tbody th {
+  color: #C9A84C;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.comparison-check,
+.comparison-cross {
+  display: inline-block;
+  margin-right: 10px;
+  font-weight: 700;
+}
+
+.comparison-check {
+  color: #C9A84C;
+}
+
+.comparison-cross {
+  color: #666666;
+}
+
+.comparison-mobile-cards {
+  display: none;
+}
+
+.official-products {
+  padding-top: 0;
+}
+
+.official-products-label {
+  color: #AAAAAA;
+  font-size: 0.8rem;
+  text-align: center;
+  margin-bottom: 18px;
+}
+
+.official-logo-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+  flex-wrap: nowrap;
+  background: transparent;
+}
+
+.official-products,
+.official-products .section-inner {
+  background: transparent;
+}
+
+.official-logo-row img {
+  display: block;
+  height: 72px;
+  width: auto;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  margin: 0;
+}
+
 /* === PRICE TABLE === */
 .price-heading-row {
   display: flex;
@@ -436,6 +546,14 @@ a:hover {
   overflow-x: auto;
   border-radius: var(--radius-lg);
   border: 1px solid var(--bg-surface-border);
+}
+
+.price-installment-note {
+  display: none;
+}
+
+.price-mobile-toggle {
+  display: none;
 }
 
 .price-table {
@@ -511,11 +629,10 @@ a:hover {
 }
 
 .price-table tr.section-divider td {
-  background: var(--bg-surface);
-  color: var(--accent);
-  font-family: var(--font-heading);
+  background: #C9A84C;
+  color: #000;
   font-size: 0.85rem;
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: 1px;
   text-transform: uppercase;
   padding: 10px 20px;
@@ -700,6 +817,7 @@ a:hover {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center;
   transition: transform 0.6s ease;
 }
 
@@ -884,12 +1002,12 @@ a:hover {
 }
 
 .testimonial-text {
-  font-family: var(--font-heading);
+  font-family: var(--font-body);
   font-size: 1.15rem;
-  color: var(--text-primary);
+  color: #FFFFFF;
   line-height: 1.8;
   margin-bottom: 28px;
-  font-style: italic;
+  font-style: normal;
 }
 
 .testimonial-author {
@@ -916,13 +1034,13 @@ a:hover {
 
 .testimonial-name {
   font-weight: 600;
-  color: var(--text-primary);
+  color: #C9A84C;
   font-size: 0.95rem;
 }
 
 .testimonial-role {
   font-size: 0.8rem;
-  color: var(--text-muted);
+  color: #AAAAAA;
   margin-top: 2px;
 }
 
@@ -1044,6 +1162,71 @@ a:hover {
 .cta-hours svg {
   color: var(--accent);
   flex-shrink: 0;
+}
+
+/* === MARKETPLACE SECTION === */
+.marketplace-online .section-heading {
+  color: #FFFFFF;
+  text-align: center;
+}
+
+.marketplace-online .section-subheading {
+  color: #AAAAAA;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.marketplace-card-row {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.marketplace-card {
+  width: 260px;
+  padding: 24px;
+  background: #111111;
+  border: 1px solid #333;
+  border-radius: 12px;
+  text-align: center;
+  transition: border-color var(--transition-fast);
+}
+
+.marketplace-card:hover {
+  border-color: #C9A84C;
+}
+
+.marketplace-card img {
+  height: 80px;
+  width: auto;
+  margin: 0 auto 18px;
+}
+
+.marketplace-card h3 {
+  color: #FFFFFF;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 18px;
+}
+
+.marketplace-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 20px;
+  border: 1px solid #C9A84C;
+  border-radius: 6px;
+  background: transparent;
+  color: #C9A84C;
+  font-size: 0.9rem;
+  transition: all var(--transition-fast);
+}
+
+.marketplace-button:hover {
+  background: #C9A84C;
+  color: #000;
 }
 
 .floating-whatsapp {
@@ -1291,9 +1474,171 @@ a:hover {
     align-items: flex-start;
   }
 
+  .price-heading-row {
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: 12px;
+  }
+
+  .price-heading-row .section-heading {
+    font-size: 1.4rem;
+    flex-shrink: 0;
+  }
+
+  .price-date-row {
+    flex-shrink: 0;
+    gap: 8px;
+  }
+
+  .price-date-badge {
+    padding: 6px 10px;
+    font-size: 0.75rem;
+    white-space: nowrap;
+  }
+
+  .price-refresh-btn {
+    width: 28px;
+    height: 28px;
+    flex-shrink: 0;
+  }
+
+  .price-mobile-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    border: 1px solid #C9A84C;
+    border-radius: 999px;
+    padding: 3px;
+    margin: 0 auto 14px;
+  }
+
+  .price-mobile-toggle-btn {
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: #AAAAAA;
+    padding: 8px 12px;
+    font: inherit;
+    font-size: 0.78rem;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+
+  .price-mobile-toggle-btn.active {
+    background: #C9A84C;
+    color: #000;
+  }
+
+  .price-table-wrapper {
+    overflow-x: visible;
+  }
+
   .price-table th,
   .price-table td {
     padding: 12px 14px;
+  }
+
+  .price-table th.col-product,
+  .price-table td.col-product {
+    min-width: 100px;
+  }
+
+  .price-table td.col-product {
+    font-size: 0.72rem;
+    line-height: 1.3;
+  }
+
+  .price-table th.col-sell,
+  .price-table th.col-buy,
+  .price-table th.col-cicil,
+  .price-table td.col-sell,
+  .price-table td.col-buy,
+  .price-table td.col-cicil {
+    min-width: 85px;
+    white-space: nowrap;
+  }
+
+  .price-table td.col-sell,
+  .price-table td.col-buy,
+  .price-table td.col-cicil {
+    font-size: 0.8rem;
+  }
+
+  .price-table:not(.show-installments) th.col-cicil,
+  .price-table:not(.show-installments) td.col-cicil {
+    display: none;
+  }
+
+  .price-table.show-installments th.col-buy,
+  .price-table.show-installments td.col-buy {
+    display: none;
+  }
+
+  .price-table.show-installments th.col-sell,
+  .price-table.show-installments td.col-sell,
+  .price-table.show-installments th.col-cicil,
+  .price-table.show-installments td.col-cicil {
+    display: table-cell;
+  }
+
+  .price-installment-note {
+    display: block;
+    color: #AAAAAA;
+    font-size: 0.75rem;
+    text-align: center;
+    margin-top: 10px;
+  }
+
+  .comparison-table-wrapper {
+    display: none;
+  }
+
+  .comparison-mobile-cards {
+    display: block;
+  }
+
+  .comparison-mobile-card {
+    width: 100%;
+    background: #111111;
+    border: 1px solid #333;
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-bottom: 12px;
+  }
+
+  .comparison-mobile-card:last-child {
+    margin-bottom: 0;
+  }
+
+  .comparison-mobile-category {
+    color: #C9A84C;
+    font-weight: 600;
+    font-size: 1rem;
+    margin-bottom: 10px;
+  }
+
+  .comparison-mobile-row {
+    display: flex;
+    gap: 8px;
+    color: #FFFFFF;
+    font-size: 0.9rem;
+    margin-top: 8px;
+  }
+
+  .comparison-mobile-row span {
+    color: #C9A84C;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .comparison-mobile-row.marketplace {
+    color: #AAAAAA;
+  }
+
+  .comparison-mobile-row.marketplace span {
+    color: #666666;
   }
 
   .chart-container {
@@ -1312,6 +1657,20 @@ a:hover {
   .testimonial-arrow {
     display: none;
   }
+
+  .marketplace-card-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .marketplace-card {
+    width: 100%;
+  }
+
+  .floating-whatsapp {
+    bottom: 80px;
+    right: 16px;
+  }
 }
 
 @media (max-width: 640px) {
@@ -1322,6 +1681,10 @@ a:hover {
 
   .product-image-wrapper {
     height: 200px;
+  }
+
+  .antam-image-wrapper {
+    height: 280px;
   }
 
   .cta-heading {

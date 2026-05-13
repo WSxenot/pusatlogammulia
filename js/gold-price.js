@@ -36,8 +36,25 @@
     return rows;
   }
 
-  function isGaleri24Row(productName) {
-    return productName && productName.toUpperCase().includes('GALERI24');
+  function getProductBrand(productName) {
+    const upper = productName.toUpperCase();
+    if (upper.includes('GALERI24')) return 'GALERI24';
+    if (upper.includes('ANTAM')) return 'ANTAM';
+    return '';
+  }
+
+  function getDisplayProduct(productName) {
+    const upper = productName.toUpperCase();
+    if (upper.includes('GALERI24')) {
+      if (upper.includes('BUYBACK')) return 'Buyback / Gram';
+      const match = productName.match(/(\d+(?:[,.]\d+)?)\s*GRAM/i);
+      return match ? `${match[1]} Gram - Promo` : '';
+    }
+    if (upper.includes('ANTAM')) {
+      const match = productName.match(/(\d+(?:[,.]\d+)?)\s*GRAM/i);
+      return match ? `${match[1]} Gram - Certieye` : '';
+    }
+    return productName;
   }
 
   function clean(value) {
@@ -94,7 +111,7 @@
     if (!tbody) return;
 
     tbody.innerHTML = '';
-    let galeri24Inserted = false;
+    let currentBrand = '';
     const config = findColumnConfig(rows);
 
     if (config.dateText) {
@@ -110,27 +127,31 @@
       const sellRaw = clean(row[config.sellIndex]);
       const buyRaw = clean(row[config.buyIndex]);
       const cicilRaw = clean(row[config.cicilIndex]);
+      const brand = getProductBrand(product);
+      const displayProduct = getDisplayProduct(product);
 
-      if (isGaleri24Row(product) && !galeri24Inserted) {
-        galeri24Inserted = true;
+      if (!displayProduct) continue;
+
+      if (brand && brand !== currentBrand) {
+        currentBrand = brand;
         const dividerRow = document.createElement('tr');
         dividerRow.className = 'section-divider';
-        dividerRow.innerHTML = '<td colspan="4">Galeri24</td>';
+        dividerRow.innerHTML = `<td colspan="4">${brand}</td>`;
         tbody.appendChild(dividerRow);
       }
 
       const noticeText = `${product} ${sellRaw} ${buyRaw} ${cicilRaw}`.toLowerCase();
-      if (noticeText.includes('tanya') || (!sellRaw && product.toUpperCase().startsWith('LM ANTAM'))) {
+      if (noticeText.includes('tanya')) {
         const specialRow = document.createElement('tr');
         specialRow.className = 'special-row';
-        specialRow.innerHTML = `<td colspan="4">${escapeHtml(product)} — Tanya di Toko</td>`;
+        specialRow.innerHTML = `<td colspan="4">${escapeHtml(displayProduct)} — Tanya di Toko</td>`;
         tbody.appendChild(specialRow);
         continue;
       }
 
       const tr = document.createElement('tr');
       tr.innerHTML = `
-        <td class="col-product">${escapeHtml(product)}</td>
+        <td class="col-product">${escapeHtml(displayProduct)}</td>
         <td class="col-sell">${escapeHtml(sellRaw ? formatIDR(sellRaw) : '—')}</td>
         <td class="col-buy">${escapeHtml(renderPrice(buyRaw))}</td>
         <td class="col-cicil">${escapeHtml(renderPrice(cicilRaw))}</td>
@@ -183,5 +204,23 @@
       await fetchPrices();
       setTimeout(() => refreshBtn.classList.remove('spinning'), 800);
     };
+  }
+
+  const priceTable = document.getElementById('price-table');
+  const priceToggleBtns = document.querySelectorAll('[data-price-view]');
+  if (priceTable && priceToggleBtns.length) {
+    const setPriceView = view => {
+      priceTable.classList.toggle('show-installments', view === 'installments');
+      priceToggleBtns.forEach(btn => {
+        const isActive = btn.dataset.priceView === view;
+        btn.classList.toggle('active', isActive);
+        btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+      });
+    };
+
+    priceToggleBtns.forEach(btn => {
+      btn.onclick = () => setPriceView(btn.dataset.priceView);
+    });
+    setPriceView('standard');
   }
 })();
