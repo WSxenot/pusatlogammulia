@@ -17,7 +17,7 @@
   --font-body: 'Inter', sans-serif;
 
   /* Spacing */
-  --section-padding: 100px;
+  --section-padding: 72px;
   --section-padding-mobile: 60px;
   --content-max-width: 1200px;
   --content-padding: 24px;
@@ -1156,7 +1156,7 @@ a:hover {
 
 @media (max-width: 1024px) {
   .section {
-    padding: 80px var(--content-padding);
+    padding: var(--section-padding) var(--content-padding);
   }
 
   .about-grid {
