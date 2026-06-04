@@ -120,6 +120,7 @@
 
     tbody.innerHTML = '';
     let currentBrand = '';
+    let skipCurrentBrandRows = false;
     const config = findColumnConfig(rows);
 
     if (config.dateText) {
@@ -137,17 +138,22 @@
       const buyRaw = clean(row[config.buyIndex]);
       const cicilRaw = clean(row[config.cicilIndex]);
       const brand = getProductBrand(product);
-      const displayProduct = getDisplayProduct(product);
-
-      if (!displayProduct) continue;
 
       if (brand && brand !== currentBrand) {
         currentBrand = brand;
+        skipCurrentBrandRows = false;
         const dividerRow = document.createElement('tr');
         dividerRow.className = 'section-divider';
         dividerRow.innerHTML = `<td colspan="4">${getDisplayBrand(brand)}</td>`;
         tbody.appendChild(dividerRow);
       }
+
+      if (currentBrand === 'ANTAM' && skipCurrentBrandRows) continue;
+
+      const displayProduct = getDisplayProduct(product);
+      const isAntamStopRow = currentBrand === 'ANTAM' && /\b100\s*gram\b/i.test(product);
+
+      if (!displayProduct) continue;
 
       const noticeText = `${product} ${sellRaw} ${buyRaw} ${cicilRaw}`.toLowerCase();
       if (noticeText.includes('tanya')) {
@@ -155,6 +161,7 @@
         specialRow.className = 'special-row';
         specialRow.innerHTML = `<td colspan="4">${escapeHtml(displayProduct)} — Tanya di Toko</td>`;
         tbody.appendChild(specialRow);
+        if (isAntamStopRow) skipCurrentBrandRows = true;
         continue;
       }
 
@@ -166,6 +173,7 @@
         <td class="col-cicil">${escapeHtml(renderPrice(cicilRaw))}</td>
       `;
       tbody.appendChild(tr);
+      if (isAntamStopRow) skipCurrentBrandRows = true;
     }
   }
 
