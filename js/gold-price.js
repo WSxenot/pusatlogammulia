@@ -43,6 +43,14 @@
     return '';
   }
 
+  function isGaleri24Row(row) {
+    return row.some(cell => /galeri\s*24/i.test(clean(cell)));
+  }
+
+  function getDisplayBrand(brand) {
+    return brand === 'ANTAM' ? 'Harga COD' : brand;
+  }
+
   function getDisplayProduct(productName) {
     const upper = productName.toUpperCase();
     if (upper.includes('GALERI24')) {
@@ -122,6 +130,7 @@
     for (let i = config.startIndex; i < rows.length; i++) {
       const row = rows[i];
       if (!row?.[config.productIndex]?.trim()) continue;
+      if (isGaleri24Row(row)) continue;
 
       const product = clean(row[config.productIndex]);
       const sellRaw = clean(row[config.sellIndex]);
@@ -136,7 +145,7 @@
         currentBrand = brand;
         const dividerRow = document.createElement('tr');
         dividerRow.className = 'section-divider';
-        dividerRow.innerHTML = `<td colspan="4">${brand}</td>`;
+        dividerRow.innerHTML = `<td colspan="4">${getDisplayBrand(brand)}</td>`;
         tbody.appendChild(dividerRow);
       }
 
