@@ -390,6 +390,7 @@ a:hover {
   background: #111111;
   border: 1px solid var(--bg-surface-border);
   border-radius: var(--radius-lg);
+  display: block;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
 }
