@@ -100,8 +100,8 @@
     const headerIndex = rows.findIndex(row => row.some(cell => clean(cell).toLowerCase().includes('kami jual')));
     const header = rows[headerIndex] || [];
     const findIndex = label => header.findIndex(cell => clean(cell).toLowerCase().includes(label));
-    const sellIndex = findIndex('kami jual');
-    const buyIndex = findIndex('kami beli');
+    const sellIndex = header.reduce((lastIndex, cell, index) => clean(cell).toLowerCase().includes('kami jual') ? index : lastIndex, -1);
+    const buyIndex = sellIndex >= 0 ? sellIndex + 1 : findIndex('kami beli');
     const cicilIndex = findIndex('cicil');
 
     return {
