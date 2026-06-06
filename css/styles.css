@@ -387,13 +387,15 @@ a:hover {
 }
 
 .comparison-table-wrapper {
-  overflow: visible;
   background: #111111;
   border: 1px solid var(--bg-surface-border);
   border-radius: var(--radius-lg);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .comparison-table {
+  min-width: 760px;
   width: 100%;
   border-collapse: collapse;
   table-layout: fixed;
@@ -413,14 +415,15 @@ a:hover {
 }
 
 .comparison-table thead th {
-  color: var(--text-secondary);
+  background: #C9A84C;
+  color: #0A0A0A;
   font-size: 0.85rem;
-  text-transform: uppercase;
   letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
 .comparison-table thead .plm-column {
-  color: #C9A84C;
+  color: #0A0A0A;
 }
 
 .comparison-table tbody th {
@@ -444,9 +447,6 @@ a:hover {
   color: #666666;
 }
 
-.comparison-mobile-cards {
-  display: none;
-}
 
 .official-products {
   padding-top: 0;
@@ -1592,53 +1592,16 @@ a:hover {
   }
 
   .comparison-table-wrapper {
-    display: none;
+    overflow-x: auto;
   }
 
-  .comparison-mobile-cards {
-    display: block;
+  .comparison-table {
+    min-width: 720px;
   }
 
-  .comparison-mobile-card {
-    width: 100%;
-    background: #111111;
-    border: 1px solid #333;
-    border-radius: 10px;
-    padding: 16px 20px;
-    margin-bottom: 12px;
-  }
-
-  .comparison-mobile-card:last-child {
-    margin-bottom: 0;
-  }
-
-  .comparison-mobile-category {
-    color: #C9A84C;
-    font-weight: 600;
-    font-size: 1rem;
-    margin-bottom: 10px;
-  }
-
-  .comparison-mobile-row {
-    display: flex;
-    gap: 8px;
-    color: #FFFFFF;
-    font-size: 0.9rem;
-    margin-top: 8px;
-  }
-
-  .comparison-mobile-row span {
-    color: #C9A84C;
-    font-weight: 700;
-    flex-shrink: 0;
-  }
-
-  .comparison-mobile-row.marketplace {
-    color: #AAAAAA;
-  }
-
-  .comparison-mobile-row.marketplace span {
-    color: #666666;
+  .comparison-table th,
+  .comparison-table td {
+    padding: 14px 16px;
   }
 
   .chart-container {
