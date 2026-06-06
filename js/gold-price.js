@@ -3,6 +3,7 @@
   const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQm3NbnQJ8v3C5FoXlUZeO2_n-Y7Jn11U1XRMKrSrKdW5wyHXMxeTvOPKLqYAFgdxj2Ri8kS_N3nhg4/pub?gid=625724274&single=true&output=csv';
 
   function formatIDR(value) {
+    if (value.toString().includes('X')) return value.toString().trim();
     const num = parseInt(value.toString().replace(/[^0-9]/g, ''), 10);
     return isNaN(num) ? value : num.toLocaleString('id-ID');
   }
