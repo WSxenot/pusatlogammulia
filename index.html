@@ -216,6 +216,445 @@
     </div>
   </section>
 
+  <style>
+    .verify-section {
+      background: #0A0A0A;
+      color: #F0EDE8;
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+      padding: 72px 24px;
+    }
+
+    .verify-section * {
+      box-sizing: border-box;
+    }
+
+    .verify-wrap {
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .verify-heading {
+      text-align: center;
+      margin: 0 auto 40px;
+      max-width: 720px;
+    }
+
+    .verify-kicker {
+      color: #C9A84C;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+    }
+
+    .verify-heading h2 {
+      color: #FFFFFF;
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 4vw, 3rem);
+      line-height: 1.15;
+      margin-bottom: 16px;
+    }
+
+    .verify-heading p {
+      color: #B9B5AD;
+      font-size: 1rem;
+      line-height: 1.7;
+      margin: 0;
+    }
+
+    .verify-grid {
+      align-items: stretch;
+      display: grid;
+      gap: 24px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      width: 100%;
+    }
+
+    .verify-card {
+      background: #111111;
+      border: 1px solid #333333;
+      border-radius: 18px;
+      color: #F0EDE8;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      overflow: hidden;
+      padding: 28px;
+      transition: border-color 0.2s ease, transform 0.2s ease;
+    }
+
+    .verify-card:hover {
+      border-color: rgba(201, 168, 76, 0.65);
+      transform: translateY(-2px);
+    }
+
+    .verify-card-top {
+      align-items: center;
+      display: flex;
+      gap: 12px;
+      justify-content: space-between;
+      margin-bottom: 22px;
+    }
+
+    .verify-brand {
+      color: #C9A84C;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .verify-badge {
+      background: rgba(201, 168, 76, 0.12);
+      border: 1px solid rgba(201, 168, 76, 0.28);
+      border-radius: 999px;
+      color: #C9A84C;
+      font-size: 0.74rem;
+      font-weight: 700;
+      padding: 6px 10px;
+      white-space: nowrap;
+    }
+
+    .verify-card h3 {
+      color: #FFFFFF;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      line-height: 1.2;
+      margin-bottom: 10px;
+    }
+
+    .verify-card p {
+      color: #AAAAAA;
+      line-height: 1.7;
+      margin: 0;
+    }
+
+    .verify-visual {
+      margin: 22px auto 0;
+      max-width: 380px;
+      width: 100%;
+    }
+
+    .verify-image-wrap {
+      position: relative;
+    }
+
+    .verify-image-wrap-galeri {
+      padding: 8px;
+    }
+
+    .verify-image-wrap-galeri .qr-scan-label,
+    .verify-image-wrap-galeri .qr-bracket {
+      color: #FFFFFF;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .verify-image-wrap-antam {
+      aspect-ratio: 3 / 4;
+      border: 1px solid rgba(201, 168, 76, 0.35);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .verify-visual img {
+      border: 1px solid rgba(201, 168, 76, 0.35);
+      border-radius: 12px;
+      display: block;
+      height: auto;
+      width: 100%;
+    }
+
+    .verify-image-wrap-antam img {
+      border: 0;
+      border-radius: 0;
+      height: 100%;
+      object-fit: contain;
+      object-position: center;
+    }
+
+    .verify-galeri-image {
+      object-fit: contain;
+      object-position: center;
+    }
+
+    .qr-scan-label {
+      color: #C49A1A;
+      font-family: 'DM Sans', 'Inter', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      left: var(--qr-left);
+      letter-spacing: 0.15em;
+      line-height: 1;
+      pointer-events: none;
+      position: absolute;
+      text-transform: uppercase;
+      top: calc(var(--qr-top) - 9%);
+      transform: translateX(-50%);
+      white-space: nowrap;
+      z-index: 3;
+    }
+
+    .qr-bracket {
+      background: transparent;
+      height: var(--qr-size);
+      left: var(--qr-left);
+      pointer-events: none;
+      position: absolute;
+      top: var(--qr-top);
+      transform: translate(-50%, -50%);
+      width: var(--qr-size);
+      z-index: 2;
+    }
+
+    .qr-bracket span {
+      background: transparent;
+      height: 22px;
+      position: absolute;
+      width: 22px;
+    }
+
+    .qr-bracket .top-left {
+      border-left: 3px solid #C49A1A;
+      border-top: 3px solid #C49A1A;
+      left: 0;
+      top: 0;
+    }
+
+    .qr-bracket .top-right {
+      border-right: 3px solid #C49A1A;
+      border-top: 3px solid #C49A1A;
+      right: 0;
+      top: 0;
+    }
+
+    .qr-bracket .bottom-left {
+      border-bottom: 3px solid #C49A1A;
+      border-left: 3px solid #C49A1A;
+      bottom: 0;
+      left: 0;
+    }
+
+    .qr-bracket .bottom-right {
+      border-bottom: 3px solid #C49A1A;
+      border-right: 3px solid #C49A1A;
+      bottom: 0;
+      right: 0;
+    }
+
+    .verify-visual figcaption {
+      color: #8F8A82;
+      font-size: 0.78rem;
+      line-height: 1.5;
+      margin-top: 10px;
+      text-align: center;
+    }
+
+    .verify-steps {
+      display: grid;
+      gap: 14px;
+      list-style: none;
+      margin: 24px 0;
+      padding: 0;
+    }
+
+    .verify-steps li {
+      align-items: flex-start;
+      display: grid;
+      gap: 12px;
+      grid-template-columns: 32px 1fr;
+    }
+
+    .verify-step-number {
+      align-items: center;
+      background: #C9A84C;
+      border-radius: 999px;
+      color: #0A0A0A;
+      display: flex;
+      font-size: 0.85rem;
+      font-weight: 800;
+      height: 32px;
+      justify-content: center;
+      width: 32px;
+    }
+
+    .verify-step-copy strong {
+      color: #FFFFFF;
+      display: block;
+      font-size: 0.95rem;
+      margin-bottom: 3px;
+    }
+
+    .verify-step-copy span {
+      color: #AAAAAA;
+      display: block;
+      font-size: 0.9rem;
+      line-height: 1.55;
+    }
+
+    .verify-actions {
+      display: grid;
+      gap: 10px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      margin-top: auto;
+    }
+
+    .verify-download {
+      align-items: center;
+      background: transparent;
+      border: 1px solid #C9A84C;
+      border-radius: 10px;
+      color: #C9A84C;
+      display: inline-flex;
+      font-size: 0.9rem;
+      font-weight: 700;
+      justify-content: center;
+      min-height: 44px;
+      padding: 10px 14px;
+      text-align: center;
+      transition: all 0.2s ease;
+    }
+
+    .verify-download:hover {
+      background: #C9A84C;
+      border-color: #C9A84C;
+      color: #0A0A0A;
+    }
+
+    @media (max-width: 768px) {
+      .verify-section {
+        padding: 60px 24px;
+      }
+
+      .verify-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .verify-card {
+        padding: 22px;
+      }
+    }
+
+    @media (max-width: 420px) {
+      .verify-actions {
+        grid-template-columns: 1fr;
+      }
+
+      .verify-card-top {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .verify-section {
+        background: #0A0A0A;
+        color: #F0EDE8;
+      }
+
+      .verify-card {
+        background: #111111;
+        border-color: #333333;
+      }
+    }
+  </style>
+
+  <section id="verifikasi" class="verify-section" aria-labelledby="verify-title">
+    <div class="verify-wrap">
+      <div class="verify-heading">
+        <p class="verify-kicker">Verifikasi resmi</p>
+        <h2 id="verify-title">Cara Verifikasi Keaslian Emas</h2>
+        <p>Setiap produk dilengkapi QR Code resmi yang dapat diverifikasi langsung dari smartphone Anda.</p>
+      </div>
+
+      <div class="verify-grid">
+        <article class="verify-card">
+          <div class="verify-card-top">
+            <span class="verify-brand">Galeri 24</span>
+            <span class="verify-badge">G24 Gold</span>
+          </div>
+          <h3>Verifikasi Produk Galeri24</h3>
+          <p>Gunakan aplikasi G24 Gold untuk memastikan QR Code dan sertifikat digital produk Galeri24 tampil sesuai data resmi.</p>
+          <figure class="verify-visual">
+            <div class="verify-image-wrap verify-image-wrap-galeri" style="--qr-left: 74%; --qr-top: 79%; --qr-size: 18%;">
+              <img src="images/Tutorial photos/galeri24-certicard-front.png" alt="QR Code yang perlu discan pada produk Galeri24" class="verify-galeri-image" loading="lazy">
+              <span class="qr-scan-label">SCAN</span>
+              <div class="qr-bracket" aria-hidden="true">
+                <span class="top-left"></span>
+                <span class="top-right"></span>
+                <span class="bottom-left"></span>
+                <span class="bottom-right"></span>
+              </div>
+            </div>
+            <figcaption>Scan QR Code putih di bagian bawah produk Galeri24.</figcaption>
+          </figure>
+          <ol class="verify-steps">
+            <li>
+              <span class="verify-step-number">1</span>
+              <span class="verify-step-copy"><strong>Unduh aplikasi G24 Gold</strong><span>Cari "G24 Gold", bukan "GALERI24".</span></span>
+            </li>
+            <li>
+              <span class="verify-step-number">2</span>
+              <span class="verify-step-copy"><strong>Scan QR Code produk</strong><span>Arahkan kamera ke QR Code di bagian depan logam mulia.</span></span>
+            </li>
+            <li>
+              <span class="verify-step-number">3</span>
+              <span class="verify-step-copy"><strong>Cek sertifikat digital</strong><span>Data sertifikat resmi akan tampil lengkap di layar.</span></span>
+            </li>
+          </ol>
+          <div class="verify-actions">
+            <a class="verify-download" href="https://play.google.com/store/apps/details?id=id.co.g24.gold" target="_blank" rel="noopener noreferrer" onclick="window.open(this.href, '_blank', 'noopener,noreferrer'); return false;">Google Play</a>
+            <a class="verify-download" href="https://apps.apple.com/id/app/g24-gold/id6744876019?l=id" target="_blank" rel="noopener noreferrer" onclick="window.open(this.href, '_blank', 'noopener,noreferrer'); return false;">App Store</a>
+          </div>
+        </article>
+
+        <article class="verify-card">
+          <div class="verify-card-top">
+            <span class="verify-brand">ANTAM</span>
+            <span class="verify-badge">CertiEye</span>
+          </div>
+          <h3>Verifikasi Produk ANTAM</h3>
+          <p>Gunakan aplikasi CertiEye untuk memindai CertiCard ANTAM dan melihat status autentikasi produk langsung dari ponsel.</p>
+          <figure class="verify-visual">
+            <div class="verify-image-wrap verify-image-wrap-antam" style="--qr-left: 26%; --qr-top: 78.5%; --qr-size: 13%;">
+              <img src="images/Tutorial photos/antam-certicard-reverse.png.png" alt="QR Code yang perlu discan pada CertiCard ANTAM" class="verify-antam-image" loading="lazy">
+              <span class="qr-scan-label">SCAN</span>
+              <div class="qr-bracket" aria-hidden="true">
+                <span class="top-left"></span>
+                <span class="top-right"></span>
+                <span class="bottom-left"></span>
+                <span class="bottom-right"></span>
+              </div>
+            </div>
+            <figcaption>Scan Security QR Code di bagian belakang CertiCard ANTAM.</figcaption>
+          </figure>
+          <ol class="verify-steps">
+            <li>
+              <span class="verify-step-number">1</span>
+              <span class="verify-step-copy"><strong>Unduh aplikasi CertiEye</strong><span>Tersedia gratis di Google Play dan App Store.</span></span>
+            </li>
+            <li>
+              <span class="verify-step-number">2</span>
+              <span class="verify-step-copy"><strong>Scan QR Code CertiCard</strong><span>Arahkan kamera aplikasi ke QR Code pada kemasan emas ANTAM.</span></span>
+            </li>
+            <li>
+              <span class="verify-step-number">3</span>
+              <span class="verify-step-copy"><strong>Pastikan status asli</strong><span>Status AUTHENTICATED dan nomor seri produk akan muncul jika asli.</span></span>
+            </li>
+          </ol>
+          <div class="verify-actions">
+            <a class="verify-download" href="https://play.google.com/store/apps/details?id=com.infotoo.certieye" target="_blank" rel="noopener noreferrer" onclick="window.open(this.href, '_blank', 'noopener,noreferrer'); return false;">Google Play</a>
+            <a class="verify-download" href="https://apps.apple.com/us/app/certieye/id530413073" target="_blank" rel="noopener noreferrer" onclick="window.open(this.href, '_blank', 'noopener,noreferrer'); return false;">App Store</a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
   <!-- 3. Price Table -->
   <section id="harga" class="section price-table-section">
     <div class="section-inner reveal">
