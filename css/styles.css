@@ -428,6 +428,8 @@ a:hover {
 }
 
 .comparison-table tbody th {
+  background: transparent;
+  border-left: 2px solid #C9A84C;
   color: #C9A84C;
   font-weight: 600;
   white-space: nowrap;
@@ -468,6 +470,8 @@ a:hover {
   gap: 40px;
   flex-wrap: nowrap;
   background: transparent;
+  box-sizing: border-box;
+  padding: 0 16px;
 }
 
 .official-products,
@@ -478,10 +482,13 @@ a:hover {
 .official-logo-row img {
   display: block;
   height: 72px;
+  max-width: min(42vw, 270px);
+  object-fit: contain;
   width: auto;
   background: transparent;
   border: 0;
   box-shadow: none;
+  flex-shrink: 1;
   margin: 0;
 }
 
@@ -1635,8 +1642,9 @@ a:hover {
 
   .comparison-table tbody th {
     grid-column: 1 / -1;
-    background: #C9A84C;
-    color: #0A0A0A;
+    background: transparent;
+    border-left: 2px solid #C9A84C;
+    color: #C9A84C;
     border-bottom: none;
   }
 
@@ -1670,6 +1678,18 @@ a:hover {
 
   .marketplace-card {
     width: 100%;
+  }
+
+  .official-logo-row {
+    gap: 16px !important;
+    padding: 0 16px;
+  }
+
+  .official-logo-row img {
+    height: auto !important;
+    max-width: 132px;
+    object-fit: contain;
+    width: calc((100vw - 64px) / 2) !important;
   }
 
   .floating-whatsapp {
