@@ -428,7 +428,8 @@ a:hover {
 }
 
 .comparison-table tbody th {
-  background: transparent;
+  background: transparent !important;
+  background-color: transparent !important;
   border-left: 2px solid #C9A84C;
   color: #C9A84C;
   font-weight: 600;
@@ -463,11 +464,11 @@ a:hover {
 }
 
 .official-logo-row {
-  display: flex;
+  display: flex !important;
   flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  gap: 40px;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 28px !important;
   flex-wrap: nowrap;
   background: transparent;
   box-sizing: border-box;
@@ -481,15 +482,23 @@ a:hover {
 
 .official-logo-row img {
   display: block;
-  height: 72px;
-  max-width: min(42vw, 270px);
-  object-fit: contain;
-  width: auto;
+  height: 56px !important;
+  max-width: calc((100vw - 72px) / 2);
+  object-fit: contain !important;
+  width: 184px !important;
   background: transparent;
   border: 0;
   box-shadow: none;
-  flex-shrink: 1;
+  flex-shrink: 1 !important;
   margin: 0;
+}
+
+.official-logo-row img[alt="ANTAM"] {
+  object-view-box: inset(326px 1280px 327px 1280px);
+}
+
+.official-logo-row img[alt="Galeri24"] {
+  object-view-box: inset(308px 1341px 366px 1250px);
 }
 
 /* === PRICE TABLE === */
@@ -1642,7 +1651,8 @@ a:hover {
 
   .comparison-table tbody th {
     grid-column: 1 / -1;
-    background: transparent;
+    background: transparent !important;
+    background-color: transparent !important;
     border-left: 2px solid #C9A84C;
     color: #C9A84C;
     border-bottom: none;
@@ -1681,15 +1691,15 @@ a:hover {
   }
 
   .official-logo-row {
-    gap: 16px !important;
+    gap: 18px !important;
     padding: 0 16px;
   }
 
   .official-logo-row img {
-    height: auto !important;
-    max-width: 132px;
-    object-fit: contain;
-    width: calc((100vw - 64px) / 2) !important;
+    height: 56px !important;
+    max-width: calc((100vw - 70px) / 2);
+    object-fit: contain !important;
+    width: 164px !important;
   }
 
   .floating-whatsapp {
