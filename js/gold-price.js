@@ -1,12 +1,7 @@
-// Price table from Google Sheets CSV
+// Price table from Cloudflare Worker snapshot
 (function() {
-  const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQm3NbnQJ8v3C5FoXlUZeO2_n-Y7Jn11U1XRMKrSrKdW5wyHXMxeTvOPKLqYAFgdxj2Ri8kS_N3nhg4/pub?gid=625724274&single=true&output=csv';
-
-  function formatIDR(value) {
-    if (value.toString().includes('X')) return value.toString().trim();
-    const num = parseInt(value.toString().replace(/[^0-9]/g, ''), 10);
-    return isNaN(num) ? value : num.toLocaleString('id-ID');
-  }
+  const PRICE_WORKER_URL = 'https://plm-price-worker.pusatlogammulia.workers.dev/';
+  const PRICE_UNAVAILABLE_MESSAGE = 'Harga hari ini belum tersedia. Silakan kembali setelah jam 11.30 WIB.';
 
   function maskLast6(val) {
     const digits = String(val).replace(/\D/g, "");
@@ -22,73 +17,14 @@
     return maskLast6(value);
   }
 
-  function parseCSV(text) {
-    const rows = [];
-    const lines = text.trim().split(/\r?\n/);
-    for (const line of lines) {
-      const cols = [];
-      let inQuotes = false;
-      let current = '';
-      for (let i = 0; i < line.length; i++) {
-        const char = line[i];
-        if (char === '"') {
-          if (inQuotes && line[i + 1] === '"') {
-            current += '"';
-            i++;
-          } else {
-            inQuotes = !inQuotes;
-          }
-        } else if (char === ',' && !inQuotes) {
-          cols.push(current.trim());
-          current = '';
-        } else {
-          current += char;
-        }
-      }
-      cols.push(current.trim());
-      rows.push(cols);
-    }
-    return rows;
-  }
-
-  function getProductBrand(productName) {
-    const upper = productName.toUpperCase();
-    if (upper.includes('GALERI24')) return 'GALERI24';
-    if (upper.includes('SILVER')) return 'SILVER';
-    if (upper.includes('ANTAM')) return 'ANTAM';
-    return '';
-  }
-
   function getDisplayBrand(brand) {
     if (brand === 'ANTAM') return 'Gold Catalogue';
     if (brand === 'SILVER') return 'Silver Catalogue';
     return brand;
   }
 
-  function getDisplayProduct(productName) {
-    const upper = productName.toUpperCase();
-    if (upper.includes('GALERI24')) {
-      if (upper.includes('BUYBACK')) return 'Buyback / Gram';
-      const match = productName.match(/(\d+(?:[,.]\d+)?)\s*GRAM/i);
-      return match ? `${match[1]} Gram - Promo` : '';
-    }
-    if (upper.includes('SILVER')) {
-      const match = productName.match(/(\d+(?:[,.]\d+)?)\s*GRAM/i);
-      return match ? `Silver ${match[1]} Gram` : '';
-    }
-    if (upper.includes('ANTAM')) {
-      const match = productName.match(/(\d+(?:[,.]\d+)?)\s*GRAM/i);
-      return match ? `${match[1]} Gram - Certieye` : '';
-    }
-    return productName;
-  }
-
-  function clean(value) {
-    return (value || '').replace(/['"]/g, '').trim();
-  }
-
   function escapeHtml(value) {
-    return value.replace(/[&<>"']/g, char => ({
+    return String(value).replace(/[&<>"']/g, char => ({
       '&': '&amp;',
       '<': '&lt;',
       '>': '&gt;',
@@ -97,74 +33,60 @@
     })[char]);
   }
 
-  function isTextPrice(value) {
-    return isNaN(parseInt(value, 10));
+  function showPriceTable() {
+    const table = document.getElementById('price-table');
+    const message = document.getElementById('price-unavailable-message');
+    if (table) table.style.display = '';
+    if (message) message.remove();
   }
 
-  function renderPrice(value) {
-    return value ? (isTextPrice(value) ? value : formatIDR(value)) : '—';
-  }
+  function showPriceUnavailableMessage() {
+    const table = document.getElementById('price-table');
+    const wrapper = table?.closest('.price-table-wrapper');
+    if (!wrapper) return;
 
-  function findDateText(rows) {
-    const datePattern = /^\d{1,2}[-/\s][A-Za-z]{3,}[-/\s]\d{4}$/;
-    for (const row of rows) {
-      const dateText = row.map(clean).find(value => datePattern.test(value));
-      if (dateText) return dateText;
+    table.style.display = 'none';
+    let message = document.getElementById('price-unavailable-message');
+    if (!message) {
+      message = document.createElement('div');
+      message.id = 'price-unavailable-message';
+      message.setAttribute('role', 'status');
+      Object.assign(message.style, {
+        color: '#C9A84C',
+        textAlign: 'center',
+        fontFamily: 'inherit',
+        lineHeight: '1.6',
+        padding: '24px 16px'
+      });
+      wrapper.appendChild(message);
     }
-    return '';
+    message.textContent = PRICE_UNAVAILABLE_MESSAGE;
   }
 
-  function findColumnConfig(rows) {
-    const headerIndex = rows.findIndex(row =>
-      row.some(cell => clean(cell).toLowerCase().includes('kami jual')) &&
-      row.some(cell => clean(cell).toLowerCase() === 'tampil')
-    );
-    const header = rows[headerIndex] || [];
-    const findIndex = label => header.findIndex(cell => clean(cell).toLowerCase().includes(label));
-    const sellIndex = header.reduce((lastIndex, cell, index) => clean(cell).toLowerCase().includes('kami jual') ? index : lastIndex, -1);
-    const buyIndex = sellIndex >= 0 ? sellIndex + 1 : findIndex('kami beli');
-    const cicilIndex = findIndex('cicil');
-    const tampilIndex = header.findIndex(cell => clean(cell).toLowerCase() === 'tampil');
-
-    return {
-      startIndex: headerIndex >= 0 ? headerIndex + 1 : 2,
-      productIndex: sellIndex > 0 ? sellIndex - 1 : 0,
-      sellIndex: sellIndex >= 0 ? sellIndex : 1,
-      buyIndex: buyIndex >= 0 ? buyIndex : 2,
-      cicilIndex: cicilIndex >= 0 ? cicilIndex : (buyIndex >= 0 ? buyIndex : 2),
-      tampilIndex: tampilIndex >= 0 ? tampilIndex : -1,
-      dateText: findDateText(rows.slice(0, headerIndex >= 0 ? headerIndex : 2))
-    };
-  }
-
-  function buildTable(rows) {
+  function buildTable(rows, sourceDateText) {
     const tbody = document.getElementById('price-table-body');
     if (!tbody) return;
 
+    showPriceTable();
     tbody.innerHTML = '';
-    const config = findColumnConfig(rows);
     const groups = { ANTAM: [], SILVER: [] };
 
-    if (config.dateText) {
+    if (sourceDateText) {
       const dateEl = document.getElementById('price-date-text');
-      if (dateEl) dateEl.textContent = `Per ${config.dateText}`;
+      if (dateEl) dateEl.textContent = `Per ${sourceDateText}`;
     }
 
-    for (let i = config.startIndex; i < rows.length; i++) {
-      const row = rows[i];
-      if (!row?.[config.productIndex]?.trim()) continue;
-      if (clean(row[config.tampilIndex]).toLowerCase() !== 'true') continue;
-
-      const product = clean(row[config.productIndex]);
-      const sellRaw = clean(row[config.sellIndex]);
-      const buyRaw = clean(row[config.buyIndex]);
-      const cicilRaw = clean(row[config.cicilIndex]);
-      const brand = getProductBrand(product);
-      const displayProduct = getDisplayProduct(product);
-
-      if (!groups[brand] || !displayProduct) continue;
-      groups[brand].push({ displayProduct, sellRaw, buyRaw, cicilRaw });
-    }
+    rows.forEach(row => {
+      const brand = row.brand;
+      const displayProduct = row.displayProduct;
+      if (!groups[brand] || !displayProduct) return;
+      groups[brand].push({
+        displayProduct,
+        sellRaw: row.sellRaw || '',
+        buyRaw: row.buyRaw || '',
+        cicilRaw: row.cicilRaw || ''
+      });
+    });
 
     ['ANTAM', 'SILVER'].forEach(brand => {
       if (!groups[brand].length) return;
@@ -189,24 +111,21 @@
 
   async function fetchPrices() {
     const tbody = document.getElementById('price-table-body');
-    if (!SHEET_CSV_URL || SHEET_CSV_URL === 'YOUR_GOOGLE_SHEET_CSV_URL_HERE') {
-      if (tbody) {
-        tbody.innerHTML = `
-          <tr class="loading-row">
-            <td colspan="4">Harga akan segera tersedia. Hubungi kami untuk harga terkini.</td>
-          </tr>
-        `;
-      }
-      return;
-    }
 
     try {
-      const response = await fetch(SHEET_CSV_URL);
+      const response = await fetch(PRICE_WORKER_URL);
+      const payload = await response.json();
+      if (payload.ok === false || ['before_price_cutoff', 'snapshot_not_ready'].includes(payload.error)) {
+        showPriceUnavailableMessage();
+        return;
+      }
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      buildTable(parseCSV(await response.text()));
+      if (!Array.isArray(payload.rows)) throw new Error('Invalid price snapshot');
+      buildTable(payload.rows, payload.sourceDateText);
     } catch (err) {
       console.error('Price table fetch error:', err);
       if (tbody) {
+        showPriceTable();
         tbody.innerHTML = `
           <tr class="error-row">
             <td colspan="4">
