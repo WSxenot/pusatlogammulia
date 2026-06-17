@@ -8,6 +8,20 @@
     return isNaN(num) ? value : num.toLocaleString('id-ID');
   }
 
+  function maskLast6(val) {
+    const digits = String(val).replace(/\D/g, "");
+    if (digits.length <= 6) return "—";
+    const head = digits.slice(0, -6);
+    const masked = head + "XXXXXX";
+    return masked.replace(/\B(?=(.{3})+(?!.))/g, ".");
+  }
+
+  function renderSell(value) {
+    if (!value) return '—';
+    if (value.toString().includes('X')) return value.toString().trim();
+    return maskLast6(value);
+  }
+
   function parseCSV(text) {
     const rows = [];
     const lines = text.trim().split(/\r?\n/);
@@ -40,16 +54,15 @@
   function getProductBrand(productName) {
     const upper = productName.toUpperCase();
     if (upper.includes('GALERI24')) return 'GALERI24';
+    if (upper.includes('SILVER')) return 'SILVER';
     if (upper.includes('ANTAM')) return 'ANTAM';
     return '';
   }
 
-  function isGaleri24Row(row) {
-    return row.some(cell => /galeri\s*24/i.test(clean(cell)));
-  }
-
   function getDisplayBrand(brand) {
-    return brand === 'ANTAM' ? 'Harga COD' : brand;
+    if (brand === 'ANTAM') return 'Gold Catalogue';
+    if (brand === 'SILVER') return 'Silver Catalogue';
+    return brand;
   }
 
   function getDisplayProduct(productName) {
@@ -58,6 +71,10 @@
       if (upper.includes('BUYBACK')) return 'Buyback / Gram';
       const match = productName.match(/(\d+(?:[,.]\d+)?)\s*GRAM/i);
       return match ? `${match[1]} Gram - Promo` : '';
+    }
+    if (upper.includes('SILVER')) {
+      const match = productName.match(/(\d+(?:[,.]\d+)?)\s*GRAM/i);
+      return match ? `Silver ${match[1]} Gram` : '';
     }
     if (upper.includes('ANTAM')) {
       const match = productName.match(/(\d+(?:[,.]\d+)?)\s*GRAM/i);
@@ -98,19 +115,24 @@
   }
 
   function findColumnConfig(rows) {
-    const headerIndex = rows.findIndex(row => row.some(cell => clean(cell).toLowerCase().includes('kami jual')));
+    const headerIndex = rows.findIndex(row =>
+      row.some(cell => clean(cell).toLowerCase().includes('kami jual')) &&
+      row.some(cell => clean(cell).toLowerCase() === 'tampil')
+    );
     const header = rows[headerIndex] || [];
     const findIndex = label => header.findIndex(cell => clean(cell).toLowerCase().includes(label));
     const sellIndex = header.reduce((lastIndex, cell, index) => clean(cell).toLowerCase().includes('kami jual') ? index : lastIndex, -1);
     const buyIndex = sellIndex >= 0 ? sellIndex + 1 : findIndex('kami beli');
     const cicilIndex = findIndex('cicil');
+    const tampilIndex = header.findIndex(cell => clean(cell).toLowerCase() === 'tampil');
 
     return {
       startIndex: headerIndex >= 0 ? headerIndex + 1 : 2,
       productIndex: sellIndex > 0 ? sellIndex - 1 : 0,
       sellIndex: sellIndex >= 0 ? sellIndex : 1,
       buyIndex: buyIndex >= 0 ? buyIndex : 2,
-      cicilIndex: cicilIndex >= 0 ? cicilIndex : 3,
+      cicilIndex: cicilIndex >= 0 ? cicilIndex : (buyIndex >= 0 ? buyIndex : 2),
+      tampilIndex: tampilIndex >= 0 ? tampilIndex : -1,
       dateText: findDateText(rows.slice(0, headerIndex >= 0 ? headerIndex : 2))
     };
   }
@@ -120,9 +142,8 @@
     if (!tbody) return;
 
     tbody.innerHTML = '';
-    let currentBrand = '';
-    let skipCurrentBrandRows = false;
     const config = findColumnConfig(rows);
+    const groups = { ANTAM: [], SILVER: [] };
 
     if (config.dateText) {
       const dateEl = document.getElementById('price-date-text');
@@ -132,50 +153,38 @@
     for (let i = config.startIndex; i < rows.length; i++) {
       const row = rows[i];
       if (!row?.[config.productIndex]?.trim()) continue;
-      if (isGaleri24Row(row)) continue;
+      if (clean(row[config.tampilIndex]).toLowerCase() !== 'true') continue;
 
       const product = clean(row[config.productIndex]);
       const sellRaw = clean(row[config.sellIndex]);
       const buyRaw = clean(row[config.buyIndex]);
       const cicilRaw = clean(row[config.cicilIndex]);
       const brand = getProductBrand(product);
-
-      if (brand && brand !== currentBrand) {
-        currentBrand = brand;
-        skipCurrentBrandRows = false;
-        const dividerRow = document.createElement('tr');
-        dividerRow.className = 'section-divider';
-        dividerRow.innerHTML = `<td colspan="4">${getDisplayBrand(brand)}</td>`;
-        tbody.appendChild(dividerRow);
-      }
-
-      if (currentBrand === 'ANTAM' && skipCurrentBrandRows) continue;
-
       const displayProduct = getDisplayProduct(product);
-      const isAntamStopRow = currentBrand === 'ANTAM' && /\b100\s*gram\b/i.test(product);
 
-      if (!displayProduct) continue;
-
-      const noticeText = `${product} ${sellRaw} ${buyRaw} ${cicilRaw}`.toLowerCase();
-      if (noticeText.includes('tanya')) {
-        const specialRow = document.createElement('tr');
-        specialRow.className = 'special-row';
-        specialRow.innerHTML = `<td colspan="4">${escapeHtml(displayProduct)} — Tanya di Toko</td>`;
-        tbody.appendChild(specialRow);
-        if (isAntamStopRow) skipCurrentBrandRows = true;
-        continue;
-      }
-
-      const tr = document.createElement('tr');
-      tr.innerHTML = `
-        <td class="col-product">${escapeHtml(displayProduct)}</td>
-        <td class="col-sell">${escapeHtml(sellRaw ? formatIDR(sellRaw) : '—')}</td>
-        <td class="col-buy">${escapeHtml(renderPrice(buyRaw))}</td>
-        <td class="col-cicil">${escapeHtml(renderPrice(cicilRaw))}</td>
-      `;
-      tbody.appendChild(tr);
-      if (isAntamStopRow) skipCurrentBrandRows = true;
+      if (!groups[brand] || !displayProduct) continue;
+      groups[brand].push({ displayProduct, sellRaw, buyRaw, cicilRaw });
     }
+
+    ['ANTAM', 'SILVER'].forEach(brand => {
+      if (!groups[brand].length) return;
+
+      const dividerRow = document.createElement('tr');
+      dividerRow.className = `section-divider section-divider--${brand.toLowerCase()}`;
+      dividerRow.innerHTML = `<td colspan="4">${getDisplayBrand(brand)}</td>`;
+      tbody.appendChild(dividerRow);
+
+      groups[brand].forEach(({ displayProduct, sellRaw, buyRaw, cicilRaw }) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td class="col-product">${escapeHtml(displayProduct)}</td>
+          <td class="col-sell">${escapeHtml(renderSell(sellRaw))}</td>
+          <td class="col-buy">${escapeHtml(buyRaw ? maskLast6(buyRaw) : '—')}</td>
+          <td class="col-cicil">${escapeHtml(cicilRaw ? maskLast6(cicilRaw) : '—')}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    });
   }
 
   async function fetchPrices() {

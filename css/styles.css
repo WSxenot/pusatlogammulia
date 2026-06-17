@@ -45,6 +45,8 @@
 html {
   scroll-behavior: smooth;
   scroll-padding-top: var(--navbar-height);
+  overflow-x: hidden;
+  max-width: 100%;
 }
 
 body {
@@ -55,6 +57,8 @@ body {
   line-height: 1.7;
   -webkit-font-smoothing: antialiased;
   padding-top: var(--navbar-height);
+  overflow-x: hidden;
+  max-width: 100%;
 }
 
 img {
@@ -451,7 +455,6 @@ a:hover {
   color: #666666;
 }
 
-
 .official-products {
   padding-top: 0;
 }
@@ -654,6 +657,16 @@ a:hover {
   text-transform: uppercase;
   padding: 10px 20px;
   border-top: 1px solid var(--bg-surface-border);
+}
+
+.price-table tr.section-divider--antam td {
+  background: #C9A84C;
+  color: #1A1200;
+}
+
+.price-table tr.section-divider--silver td {
+  background: #8E9BAA;
+  color: #F4F6F8;
 }
 
 .price-table tr.special-row td {
@@ -1457,6 +1470,11 @@ a:hover {
     font-size: 1.2rem;
   }
 
+  .about p,
+  .product-desc {
+    text-align: justify;
+  }
+
   /* Show hamburger, hide nav links */
   .hamburger {
     display: flex;
@@ -1552,14 +1570,20 @@ a:hover {
     overflow-x: visible;
   }
 
+  .price-table {
+    width: 100%;
+    table-layout: fixed;
+  }
+
   .price-table th,
   .price-table td {
     padding: 12px 14px;
   }
 
-  .price-table th.col-product,
-  .price-table td.col-product {
-    min-width: 100px;
+  .price-table th:first-child,
+  .price-table tbody tr:not(.section-divider) td:first-child {
+    width: 38%;
+    min-width: 38%;
   }
 
   .price-table td.col-product {
@@ -1573,7 +1597,8 @@ a:hover {
   .price-table td.col-sell,
   .price-table td.col-buy,
   .price-table td.col-cicil {
-    min-width: 85px;
+    width: 31%;
+    min-width: 31%;
     white-space: nowrap;
   }
 
