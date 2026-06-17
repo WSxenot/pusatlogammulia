@@ -14,12 +14,21 @@ Stack: Static HTML/CSS/JS — Cloudflare Pages — Google Sheets (price data)
 - [x] Comparison section: 8 categories, PLM vs Toko Lain
 - [x] Comparison section converted to table layout
 
+### Certificate Verification Section — SCAN Overlay (Done)
+- Fixed SCAN bracket positioning for both ANTAM and Galeri24 cards
+- Root cause: `object-fit: contain` letterboxing made CSS percentage positioning unreliable — percentages were relative to the container, not the actual displayed image
+- Solution: replaced CSS custom property approach (`--qr-left`, `--qr-top`) with inline JS using natural image dimensions (`naturalWidth`, `naturalHeight`) to calculate exact pixel position at runtime
+- Final JS values: Galeri24 `qrX: 0.72, qrY: 0.80` — ANTAM `qrX: 0.31, qrY: 0.80`
+- SCAN label on both cards has dark backdrop `rgba(0,0,0,0.55)` with gold text for visibility on both dark and white backgrounds
+- Overlay repositions correctly on window resize
+- To adjust in future: edit the two numbers in `positionOverlay()` calls near `</body>` in `index.html`
+
 ## In Progress
 - [ ] Hero video (AI-generated via Veo I2V — pending)
 - [ ] Hero section code implementation (video background + overlay)
 
 ## Pending
-- [ ] Certificate verification section (CertiEye + G24 Gold)
+- [x] Certificate verification section (CertiEye + G24 Gold)
 - [ ] FAQ section
 - [ ] Real shop photos
 - [ ] Payment methods section
