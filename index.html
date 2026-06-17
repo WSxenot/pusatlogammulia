@@ -385,13 +385,11 @@
       font-family: 'DM Sans', 'Inter', sans-serif;
       font-size: 10px;
       font-weight: 700;
-      left: var(--qr-left);
       letter-spacing: 0.15em;
       line-height: 1;
       pointer-events: none;
       position: absolute;
       text-transform: uppercase;
-      top: calc(var(--qr-top) - 9%);
       transform: translateX(-50%);
       white-space: nowrap;
       z-index: 3;
@@ -400,10 +398,8 @@
     .qr-bracket {
       background: transparent;
       height: var(--qr-size);
-      left: var(--qr-left);
       pointer-events: none;
       position: absolute;
-      top: var(--qr-top);
       transform: translate(-50%, -50%);
       width: var(--qr-size);
       z-index: 2;
@@ -1169,5 +1165,59 @@
   <script src="js/chart.js"></script>
   <script src="js/testimonials.js"></script>
   <script src="js/scroll-reveal.js"></script>
+  <script>
+    (function () {
+      function positionOverlay(imgEl, bracketEl, labelEl, qrX, qrY) {
+        function update() {
+          var cw = imgEl.clientWidth;
+          var ch = imgEl.clientHeight;
+          var nw = imgEl.naturalWidth;
+          var nh = imgEl.naturalHeight;
+          if (!nw || !nh || !cw || !ch) return;
+          var scale = Math.min(cw / nw, ch / nh);
+          var rw = nw * scale;
+          var rh = nh * scale;
+          var ox = (cw - rw) / 2;
+          var oy = (ch - rh) / 2;
+          var x = ox + rw * qrX;
+          var y = oy + rh * qrY;
+          bracketEl.style.left = x + 'px';
+          bracketEl.style.top = y + 'px';
+          bracketEl.style.transform = 'translate(-50%, -50%)';
+          labelEl.style.left = x + 'px';
+          labelEl.style.top = (y - rh * 0.06) + 'px';
+          labelEl.style.transform = 'translateX(-50%)';
+        }
+        if (imgEl.complete && imgEl.naturalWidth) update();
+        else imgEl.addEventListener('load', update);
+        window.addEventListener('resize', update);
+      }
+
+      var galeriWrap = document.querySelector('.verify-image-wrap-galeri');
+      if (galeriWrap) {
+        positionOverlay(
+          galeriWrap.querySelector('img'),
+          galeriWrap.querySelector('.qr-bracket'),
+          galeriWrap.querySelector('.qr-scan-label'),
+          0.81, 0.83
+        );
+      }
+
+      var antamWrap = document.querySelector('.verify-image-wrap-antam');
+      if (antamWrap) {
+        var labelEl = antamWrap.querySelector('.qr-scan-label');
+        positionOverlay(
+          antamWrap.querySelector('img'),
+          antamWrap.querySelector('.qr-bracket'),
+          labelEl,
+          0.31, 0.80
+        );
+        labelEl.style.background = 'rgba(0,0,0,0.55)';
+        labelEl.style.padding = '2px 5px';
+        labelEl.style.borderRadius = '3px';
+        labelEl.style.color = '#C9A84C';
+      }
+    })();
+  </script>
 </body>
 </html>
