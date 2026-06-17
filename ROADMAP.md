@@ -3,41 +3,43 @@ Repo: WSxenot/pusatlogammulia
 Stack: Static HTML/CSS/JS — Cloudflare Pages — Google Sheets (price data)
 
 ## Completed
+- [x] Favicon updated (transparent logo PNG)
+- [x] Navbar logo added
+- [x] Hero tagline "Pure gold, eternal value." added
+- [x] Browser tab title updated
+- [x] Social proof counter "10.000+ transaksi"
+- [x] Trust strip: ANTAM + Galeri24 official logos
+- [x] Instagram handle @8nagaemas wired in
+- [x] Marketplace section: Tokopedia, Shopee, Blibli with store links
 - [x] Price table connected to Google Sheets CSV
+- [x] Price table switched to right table (IG dan WA) via lastIndexOf
 - [x] Galeri24 section removed from price table
 - [x] ANTAM column renamed to "Harga COD"
-- [x] Mobile toggle label: Jual/Cicil → Jual/COD
-- [x] Stop-render after 100g row (Pegadaian rows hidden)
-- [x] Price table switched to right table (IG dan WA) via lastIndexOf
-- [x] Jual/COD second column header: CICIL 2× → HARGA COD
+- [x] Mobile toggle: Jual/Cicil → Jual/COD; second column CICIL 2× → HARGA COD
 - [x] Masked prices (2.8XX.000) display as raw text
-- [x] Comparison section: 8 categories, PLM vs Toko Lain
-- [x] Comparison section converted to table layout
-
-### Certificate Verification Section — SCAN Overlay (Done)
-- Fixed SCAN bracket positioning for both ANTAM and Galeri24 cards
-- Root cause: `object-fit: contain` letterboxing made CSS percentage positioning unreliable — percentages were relative to the container, not the actual displayed image
-- Solution: replaced CSS custom property approach (`--qr-left`, `--qr-top`) with inline JS using natural image dimensions (`naturalWidth`, `naturalHeight`) to calculate exact pixel position at runtime
-- Final JS values: Galeri24 `qrX: 0.72, qrY: 0.80` — ANTAM `qrX: 0.31, qrY: 0.80`
-- SCAN label on both cards has dark backdrop `rgba(0,0,0,0.55)` with gold text for visibility on both dark and white backgrounds
-- Overlay repositions correctly on window resize
-- To adjust in future: edit the two numbers in `positionOverlay()` calls near `</body>` in `index.html`
+- [x] Stop-render after 100g row (Pegadaian rows hidden, data preserved in Sheets)
+- [x] Comparison section: 8-row table, PLM vs Toko Lain, mobile full-width row headers with gold left border
+- [x] Scroll padding fix (navbar height offset)
+- [x] Cloudflare Pages migration (domain stays at Canva/Tucows, nameservers point to Cloudflare)
+- [x] Certificate verification section: ANTAM (CertiEye) + Galeri24 (G24 Gold)
+  - SCAN overlay fixed via inline JS using naturalWidth/naturalHeight
+  - Final values: Galeri24 (0.72, 0.80), ANTAM (0.31, 0.80)
+  - SCAN label: rgba(0,0,0,0.55) backdrop, gold text, repositions on resize
+  - To adjust: edit positionOverlay() values near </body> in index.html
 
 ## In Progress
-- [ ] Hero video (AI-generated via Veo I2V — pending)
-- [ ] Hero section code implementation (video background + overlay)
+- [ ] Hero video: reference images done (ChatGPT), video generation pending (Veo 3 + CapCut)
+- [ ] Hero section: video background + overlay code (pending final video)
 
 ## Pending
-- [x] Certificate verification section (CertiEye + G24 Gold)
-- [ ] FAQ section
+- [ ] FAQ section (content not yet shared)
 - [ ] Real shop photos
 - [ ] Payment methods section
 - [ ] Google Business Profile + Maps pin
-- [ ] OG image (1200x630)
-- [ ] Domain transfer (Canva → Cloudflare)
+- [ ] OG image (1200×630)
 
 ## Key Notes
-- Data lives in Google Sheets, not the codebase
-- Deployment: GitHub push → Cloudflare Pages (~60s delay)
-- Hard refresh (Ctrl+Shift+R) to verify changes
+- Data lives in Google Sheets, not the codebase — check Sheets first before debugging price display bugs
+- Deployment: GitHub push → Cloudflare Pages (~60s delay) — hard refresh (Ctrl+Shift+R) to verify
+- Codex prompts: keep scoped to one task, avoid over-explanation
 - Local path: C:\Users\1817j\Downloads\Projects\pusatlogammulia
