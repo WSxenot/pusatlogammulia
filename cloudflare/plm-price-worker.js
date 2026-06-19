@@ -30,6 +30,16 @@ export default {
 
   async scheduled(controller, env) {
     const snapshot = await buildSnapshot(controller.cron);
+    const existingSnapshot = await env.PLM_PRICES.get(SNAPSHOT_KEY, "json");
+    const existingRows = existingSnapshot?.rows || [];
+    const unchanged = existingRows.length === snapshot.rows.length &&
+      snapshot.rows.every((row, index) => row.sellRaw === existingRows[index]?.sellRaw);
+
+    if (unchanged) {
+      console.log(JSON.stringify({ event: "snapshot_unchanged" }));
+      return;
+    }
+
     await env.PLM_PRICES.put(SNAPSHOT_KEY, JSON.stringify(snapshot));
     console.log(JSON.stringify({
       event: "snapshot_written",

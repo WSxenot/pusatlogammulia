@@ -3,6 +3,15 @@ Repo: WSxenot/pusatlogammulia
 Stack: Static HTML/CSS/JS — Cloudflare Pages — Google Sheets (price data)
 
 ## Completed
+### Price Snapshot System
+- [x] Cloudflare Worker deployed at plm-price-worker.pusatlogammulia.workers.dev
+- [x] KV namespace PLM_PRICES bound to Worker
+- [x] Cron trigger: */15 4-8 * * * (every 15 min, 11am-3:59pm WIB)
+- [x] Prices locked to 11am WIB snapshot, no live Sheets fetch
+- [x] Before 11:30am WIB: site shows cutoff message instead of prices
+- [x] KV only updated when sellRaw values change
+- [x] Frontend (js/gold-price.js) fetches from Worker URL
+
 - [x] Favicon updated (transparent logo PNG)
 - [x] Navbar logo added
 - [x] Hero tagline "Pure gold, eternal value." added

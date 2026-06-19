@@ -3,18 +3,24 @@
   const PRICE_WORKER_URL = 'https://plm-price-worker.pusatlogammulia.workers.dev/';
   const PRICE_UNAVAILABLE_MESSAGE = 'Harga hari ini belum tersedia. Silakan kembali setelah jam 11.30 WIB.';
 
-  function maskLast6(val) {
-    const digits = String(val).replace(/\D/g, "");
-    if (digits.length <= 6) return "—";
-    const head = digits.slice(0, -6);
-    const masked = head + "XXXXXX";
-    return masked.replace(/\B(?=(.{3})+(?!.))/g, ".");
+  function maskAfterFirst2(value) {
+    const priceChars = String(value).toUpperCase().replace(/[^0-9X]/g, '');
+    if (priceChars.length < 3) return '—';
+
+    let visibleDigits = 0;
+    const masked = [...priceChars].map(char => {
+      if (/\d/.test(char) && visibleDigits < 2) {
+        visibleDigits++;
+        return char;
+      }
+      return 'X';
+    }).join('');
+    return masked.replace(/\B(?=(.{3})+(?!.))/g, '.');
   }
 
   function renderSell(value) {
     if (!value) return '—';
-    if (value.toString().includes('X')) return value.toString().trim();
-    return maskLast6(value);
+    return maskAfterFirst2(value);
   }
 
   function getDisplayBrand(brand) {
@@ -101,8 +107,8 @@
         tr.innerHTML = `
           <td class="col-product">${escapeHtml(displayProduct)}</td>
           <td class="col-sell">${escapeHtml(renderSell(sellRaw))}</td>
-          <td class="col-buy">${escapeHtml(buyRaw ? maskLast6(buyRaw) : '—')}</td>
-          <td class="col-cicil">${escapeHtml(cicilRaw ? maskLast6(cicilRaw) : '—')}</td>
+          <td class="col-buy">${escapeHtml(buyRaw ? maskAfterFirst2(buyRaw) : '—')}</td>
+          <td class="col-cicil">${escapeHtml(cicilRaw ? maskAfterFirst2(cicilRaw) : '—')}</td>
         `;
         tbody.appendChild(tr);
       });
